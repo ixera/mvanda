@@ -1,22 +1,33 @@
 module Eval (eval) where
 
 import Control.Monad (void)
+import Data.Map.Strict ((!))
 
 import Utils
 import Types
-import Instructions (instr)
+import Instructions (exec, arities)
 
 eval :: Mvanda -> IO ()
 eval = void . eval' []
 
 eval' :: Stack -> Mvanda -> IO (Special, Stack)
-eval' s (MvAtom a)   = instr a s
-eval' s (MvString x) = return (None, ords x `revConcat` s)
-eval' s (MvList xs)  = runList s xs
-eval' s (MvNum n)    = return (None, n : s)
+eval' st (MvInstr i s) = case arities ! i of
+  Stack ->
+    exec i st
+  Arity n ->
+    if length st < n then
+      errorWithoutStackTrace $
+        "Error in instruction `" ++ s ++ "`, not enough items on stack."
+    else do
+      let (pop, rest) = splitAt n st
+      (sp, xs) <- exec i pop
+      return (sp, xs ++ rest)
+eval' st (MvString x)  = return (None, ords x `revConcat` st)
+eval' st (MvBlock xs)  = runBlock st xs
+eval' st (MvNum n)     = return (None, n : st)
 
-runList :: Stack -> [Mvanda] -> IO (Special, Stack)
-runList s xs = go s xs
+runBlock :: Stack -> [Mvanda] -> IO (Special, Stack)
+runBlock s xs = go s xs
   where
     go st []     = return (None, st)
     go st (m:ms) = do
