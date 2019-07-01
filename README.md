@@ -20,10 +20,8 @@ All instructions are either a single punctuation character (one of
 ``!#$%&'()*+,-./:;<=>?@\^_`{|}~``), or a series of lowercase letters (`a-z`).
 Spaces are only required between two instructions with alphabetical names.
 
-String literals are enclosed with double quotes and support backslash
-escapes: `\"` for a literal double quote, `\\` for a literal backslash, and
-`\n` for a newline character. Other escapes, such as `\e`, are not yet
-implemented, but can be upon request.
+String literals are enclosed with double quotes and support some backslash
+escapes.
 
 Integer literals are simply a sequence of digits (`0-9`). There is no syntax
 for non-integer literals.
