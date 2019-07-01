@@ -5,6 +5,15 @@ in about six hours. The name comes from a conlang and was generated using
 [phonk](https://github.com/elyatai/phonk/). All values on the stack are
 arbitrary-precision rational (Haskell's `Rational`).
 
+## Dependencies
+
+- Parsec 3
+
+## Inspirations
+
+- [><>](https://esolangs.org/wiki/Fish) - some instruction names
+- [Incalculate](https://github.com/ry00001/incalculate) - paradigm ideas
+
 ## Syntax
 
 All instructions are either a single punctuation character (one of
