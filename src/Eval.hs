@@ -5,7 +5,7 @@ import Data.Map.Strict ((!))
 
 import Utils
 import Types
-import Instructions (instr)
+import Instructions (exec, arities)
 
 eval :: Mvanda -> IO ()
 eval = void . eval' []
@@ -13,14 +13,14 @@ eval = void . eval' []
 eval' :: Stack -> Mvanda -> IO (Special, Stack)
 eval' st (MvInstr i s) = case arities ! i of
   Stack ->
-    instr i st
+    exec i st
   Arity n ->
   if length st < n then
     errorWithoutStackTrace $
       "Error in instruction `" ++ s ++ "`, not enough items on stack."
   else do
     let (pop, rest) = splitAt n
-    (sp, xs) <- instr i pop
+    (sp, xs) <- exec i pop
     return (sp, xs ++ rest)
 eval' st (MvString x)  = return (None, ords x `revConcat` st)
 eval' st (MvBlock xs)  = runBlock st xs

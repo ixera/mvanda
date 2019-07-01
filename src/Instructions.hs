@@ -1,4 +1,4 @@
-module Instructions (instr) where
+module Instructions (exec, arities) where
 
 import Data.Char (chr, ord)
 import Data.Fixed (mod')
@@ -46,57 +46,57 @@ arities = M.fromAscList
   , (MCharOut, Arity 1)
   ]
 
-instr :: MvInstr -> Stack -> IO (Special, Stack)
+exec :: MvInstr -> Stack -> IO (Special, Stack)
 
-instr "*" st = binOp (*) st
-instr "+" st = binOp (+) st
-instr "-" st = binOp (-) st
-instr "/" st = binOp (/) st
-instr "%" st = binOp mod' st
+exec "*" st = binOp (*) st
+exec "+" st = binOp (+) st
+exec "-" st = binOp (-) st
+exec "/" st = binOp (/) st
+exec "%" st = binOp mod' st
 
-instr "fl" (x:st) = noop $ toRational (floor x)   : st
-instr "ce" (x:st) = noop $ toRational (ceiling x) : st
-instr "ro" (x:st) = noop $ toRational (round x)   : st
-instr "_" (x:st)  = noop $ (-x) : st
+exec "fl" (x:st) = noop $ toRational (floor x)   : st
+exec "ce" (x:st) = noop $ toRational (ceiling x) : st
+exec "ro" (x:st) = noop $ toRational (round x)   : st
+exec "_" (x:st)  = noop $ (-x) : st
 
-instr "<" st     = boolBinOp (<) st 
-instr ">" st     = boolBinOp (>) st
-instr "=" st     = boolBinOp (==) st
-instr "!" (x:st) = noop $ n : st
+exec "<" st     = boolBinOp (<) st 
+exec ">" st     = boolBinOp (>) st
+exec "=" st     = boolBinOp (==) st
+exec "!" (x:st) = noop $ n : st
   where n = if x == 0 then 1 else 0
 
-instr ":" (x:st)   = noop $ x : x : st
-instr "$" (x:y:st) = noop $ y : x : st
-instr "@" (_:st)   = noop $ st
+exec ":" (x:st)   = noop $ x : x : st
+exec "$" (x:y:st) = noop $ y : x : st
+exec "@" (_:st)   = noop $ st
 
-instr "rotu" st    = noop $ tail st   ++ [head st]
-instr "rotd" st    = noop $ [last st] ++ init st
-instr "rev" st     = noop $ reverse st
-instr "len" st     = noop $ length' st : st
+exec "rotu" st    = noop $ tail st   ++ [head st]
+exec "rotd" st    = noop $ [last st] ++ init st
+exec "rev" st     = noop $ reverse st
+exec "len" st     = noop $ length' st : st
   where length' = toRational . length
 
-instr "." st        = return (Recurse, st)
-instr ";" st        = return (Return, st)
-instr "~" st        = return (Skip 1, st)
-instr "skip" (x:st) = return (Skip (floor x), st)
-instr "?" (0:st)    = return (Skip 1, st)
-instr "?" (_:st)    = noop st
+exec "." st        = return (Recurse, st)
+exec ";" st        = return (Return, st)
+exec "~" st        = return (Skip 1, st)
+exec "skip" (x:st) = return (Skip (floor x), st)
+exec "?" (0:st)    = return (Skip 1, st)
+exec "?" (_:st)    = noop st
 
-instr "ic" st = do
+exec "ic" st = do
   i <- ord <$> getChar
   return (None, toRational i : st)
 
-instr "in" st = do
+exec "in" st = do
   i <- getLine
   case readMaybe i :: Maybe Integer of
     Nothing -> error' "Invalid integer literal!"
     Just n  -> return (None, toRational n : st)
 
-instr "is" st = do
+exec "is" st = do
   i <- getLine
   return (None, ords i `revConcat` st)
 
-instr "pn" (x:st) = do
+exec "pn" (x:st) = do
   let x' = fromRational x :: Double
   if x' `mod'` 1 == 0 then
     putStr $ show $ floor x
@@ -105,13 +105,13 @@ instr "pn" (x:st) = do
   hFlush stdout
   return (None, st)
 
-instr "pc" (x:st) = do
+exec "pc" (x:st) = do
   let x' = chr (floor x)
   putStr [x']
   hFlush stdout
   return (None, st)
 
-instr i _ = error' $ "Unknown instruction `" ++ i ++ "`!"
+exec i _ = error' $ "Unknown instruction `" ++ i ++ "`!"
 
 binOp :: (Rational -> Rational -> Rational) -> Stack -> IO (Special, Stack)
 binOp f (x:y:st) = noop $ f y x : st
