@@ -9,7 +9,7 @@ import System.IO (hFlush, stdout)
 import Types
 import Utils
 
-instr :: MvInstr -> String -> Stack -> IO (Special, Stack)
+instr :: MvInstr -> Stack -> IO (Special, Stack)
 
 instr "*" st = binOp (*) st
 instr "+" st = binOp (+) st
