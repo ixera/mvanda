@@ -1,4 +1,4 @@
-module Instructions (exec, arities) where
+module Instructions (exec, arities, instructions) where
 
 import Data.Char (chr, ord)
 import Data.Fixed (mod')
@@ -110,10 +110,10 @@ exec MLength  st = noop $ length' st : st
   where length' = toRational . length
 
 exec MRecurse _ = return (Recurse, [])
-exec MReturn  _ = return (Return, [])
-exec MSkip    _ = return (Skip 1, [])
+exec MReturn _  = return (Return, [])
+exec MSkip _    = return (Skip 1, [])
 exec MSkipN [n] = return (Skip (floor n), [])
-exec MCond 0    = return (Skip 1, [])
+exec MCond [0]  = return (Skip 1, [])
 exec MCond _    = return (None, [])
 
 exec MCharIn _ = do
@@ -159,5 +159,5 @@ boolBinOp _ _        = error'
 noop :: Stack -> IO (Special, Stack)
 noop s = return (None, s)
 
-error' :: String -> a
+error' :: a
 error' = errorWithoutStackTrace "You should never see this message."

@@ -3,13 +3,19 @@ module Parse (parse) where
 import Text.Parsec hiding (parse)
 import qualified Text.Parsec as P
 import Data.Functor.Identity (Identity)
+import qualified Data.Map.Strict as M
+import Control.Monad.Error.Class
 
 import Types
+import Instructions (instructions)
 
 type Parser = ParsecT String () Identity
 
 parse :: FilePath -> String -> Either ParseError Mvanda
-parse = P.parse $ do
+parse = P.parse mvanda
+
+mvanda :: Parser Mvanda
+mvanda = do
   l <- mvList'
   spaces
   return l
@@ -21,7 +27,7 @@ mvValue' :: Parser Mvanda
 mvValue' =
     mvNum
   <|> mvString
-  <|> mvAtom
+  <|> mvInstr
   <|> mvOp
   <|> mvList
 
@@ -37,10 +43,10 @@ mvString = do
   return $ MvString str
 
 mvOp :: Parser Mvanda
-mvOp = (MvAtom . return) <$> oneOf "!#$%&'()*+,-./:;<=>?@\\^_`{|}~"
+mvOp = oneOf "!#$%&'()*+,-./:;<=>?@\\^_`{|}~" >>= \x -> instr [x]
 
-mvAtom :: Parser Mvanda
-mvAtom = MvAtom <$> many1 lower
+mvInstr :: Parser Mvanda
+mvInstr = many1 lower >>= instr
 
 mvList :: Parser Mvanda
 mvList = do
@@ -51,7 +57,7 @@ mvList = do
   return vals
 
 mvList' :: Parser Mvanda
-mvList' = MvList <$> many (try mvValue)
+mvList' = MvBlock <$> many (try mvValue)
 
 strEscape :: Parser Char
 strEscape = do
@@ -60,3 +66,8 @@ strEscape = do
   return $ case ch of
     'n'  -> '\n'
     _    -> ch
+
+instr :: String -> Parser Mvanda
+instr s = case M.lookup s instructions of
+  Nothing -> fail $ "Invalid instruction `" ++ s ++ "`!"
+  Just i  -> return $ MvInstr i s

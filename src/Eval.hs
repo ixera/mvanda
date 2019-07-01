@@ -15,13 +15,13 @@ eval' st (MvInstr i s) = case arities ! i of
   Stack ->
     exec i st
   Arity n ->
-  if length st < n then
-    errorWithoutStackTrace $
-      "Error in instruction `" ++ s ++ "`, not enough items on stack."
-  else do
-    let (pop, rest) = splitAt n
-    (sp, xs) <- exec i pop
-    return (sp, xs ++ rest)
+    if length st < n then
+      errorWithoutStackTrace $
+        "Error in instruction `" ++ s ++ "`, not enough items on stack."
+    else do
+      let (pop, rest) = splitAt n st
+      (sp, xs) <- exec i pop
+      return (sp, xs ++ rest)
 eval' st (MvString x)  = return (None, ords x `revConcat` st)
 eval' st (MvBlock xs)  = runBlock st xs
 eval' st (MvNum n)     = return (None, n : st)
