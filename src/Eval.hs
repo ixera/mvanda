@@ -6,10 +6,6 @@ import Utils
 import Types
 import Instructions (instr)
 
-import Debug.Trace
-
-t x = trace ((show :: [Integer] -> String) . map floor . reverse $ x) x
-
 eval :: Mvanda -> IO ()
 eval = void . eval' []
 

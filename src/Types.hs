@@ -1,6 +1,5 @@
 module Types where
 
-
 import Control.Monad.State
 
 type Stack = [Rational]
