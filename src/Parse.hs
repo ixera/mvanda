@@ -8,9 +8,6 @@ import qualified Data.Map.Strict as M
 import Types
 import Instructions (instructions)
 
-import Debug.Trace
-t x = trace (show x) x
-
 type Parser = ParsecT String () Identity
 
 parse :: FilePath -> String -> Either ParseError Mvanda
