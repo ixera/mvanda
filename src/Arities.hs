@@ -6,7 +6,7 @@ import qualified Data.Map.Strict as M
 import Types
 
 arities :: Map MvInstr Arity
-arities = M.fromList
+arities = M.fromAscList
   [ (MNoop, Arity 0)
   , (MMult, Arity 2)
   , (MAdd, Arity 2)
