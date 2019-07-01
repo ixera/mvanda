@@ -1,0 +1,3 @@
+"hello" rev [pc len ? .]
+10 pc
+"\x21 \u0021 \U00000021" rev [pc len ? .]
