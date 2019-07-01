@@ -10,6 +10,39 @@ data Special =
   | Recurse
   | Return
 
+data MvInstr =
+    INoop
+  | IMult
+  | IAdd
+  | ISub
+  | IDiv
+  | IMod
+  | IFloor
+  | ICeil
+  | IRound
+  | INegate
+  | ILT
+  | IGT
+  | IEQ
+  | INot
+  | IDup
+  | ISwap
+  | IDrop
+  | IRotU
+  | IRotD
+  | IReverse
+  | ILength
+  | IRecurse
+  | IReturn
+  | ISkip
+  | ISkipN
+  | ICond
+  | INumIn
+  | ICharIn
+  | IStrIn
+  | INumOut
+  | ICharOut
+
 data Mvanda =
     MvAtom String
   | MvString String
