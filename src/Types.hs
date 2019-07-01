@@ -45,14 +45,14 @@ data MvInstr =
   deriving Show
 
 data Mvanda =
-    MvInstr MvInstr
+    MvInstr MvInstr String
   | MvString String
   | MvBlock [Mvanda]
   | MvNum Rational
 
 instance Show Mvanda where
-  show (MvInstr x)  = show x
-  show (MvString x) = show x
-  show (MvNum  x)   = show x
-  show (MvBlock xs) = "[" ++ s ++ "]"
+  show (MvInstr x s) = s
+  show (MvString x)  = show x
+  show (MvNum  x)    = show x
+  show (MvBlock xs)  = "[" ++ s ++ "]"
     where s = unwords $ show <$> xs
