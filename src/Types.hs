@@ -11,37 +11,38 @@ data Special =
   | Return
 
 data MvInstr =
-    INoop
-  | IMult
-  | IAdd
-  | ISub
-  | IDiv
-  | IMod
-  | IFloor
-  | ICeil
-  | IRound
-  | INegate
-  | ILT
-  | IGT
-  | IEQ
-  | INot
-  | IDup
-  | ISwap
-  | IDrop
-  | IRotU
-  | IRotD
-  | IReverse
-  | ILength
-  | IRecurse
-  | IReturn
-  | ISkip
-  | ISkipN
-  | ICond
-  | INumIn
-  | ICharIn
-  | IStrIn
-  | INumOut
-  | ICharOut
+    MNoop
+  | MMult
+  | MAdd
+  | MSub
+  | MDiv
+  | MMod
+  | MFloor
+  | MCeil
+  | MRound
+  | MNegate
+  | MLT
+  | MGT
+  | MEQ
+  | MNot
+  | MDup
+  | MSwap
+  | MDrop
+  | MRotU
+  | MRotD
+  | MReverse
+  | MLength
+  | MRecurse
+  | MReturn
+  | MSkip
+  | MSkipN
+  | MCond
+  | MNumIn
+  | MCharIn
+  | MStrIn
+  | MNumOut
+  | MCharOut
+  deriving Show
 
 data Mvanda =
     MvInstr MvInstr
