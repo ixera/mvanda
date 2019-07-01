@@ -1,0 +1,11 @@
+" >" pc pc
+1 in : 2 / fl [
+	: 1 = ? ;
+	: rotd rotd : rotd %
+	$ rotu *
+	rotu 1 - .
+]
+@ pn
+"si " pc pc pc
+! ? ["ton " pc pc pc pc]
+" prime.\n" rev [pc len ? .]

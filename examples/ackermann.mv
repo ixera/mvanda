@@ -1,0 +1,8 @@
+" >" pc pc in
+" >" pc pc in
+[
+	$ : 2 $ ? skip [@ @ 1 +] ; $
+	: 3 $ ? skip [@ @ 1 - 1] . ;
+	rotu : 1 - $ rotd 1 - . .
+]
+pn
