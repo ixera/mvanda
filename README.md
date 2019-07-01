@@ -37,10 +37,3 @@ immediately.
 ## Instruction set
 
 All instructions can be found in `src/Instructions.hs` (no wiki page yet).
-
-## Known bugs
-
-Because of Haskell's pattern matching syntax and the way the function that
-executes instructions is designed, if there aren't enough items on the stack
-for an instruction to execute, it (mostly) will incorrectly error saying that
-the instruction doesn't exist.

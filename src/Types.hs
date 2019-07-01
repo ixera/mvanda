@@ -42,7 +42,7 @@ data MvInstr =
   | MStrIn
   | MNumOut
   | MCharOut
-  deriving (Eq, Ord)
+  deriving (Show, Eq, Ord)
   -- Ord is required for the Map in Arities.hs
   -- Eq is required for Ord
 
