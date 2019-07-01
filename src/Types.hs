@@ -44,14 +44,14 @@ data MvInstr =
   | ICharOut
 
 data Mvanda =
-    MvAtom String
+    MvInstr MvInstr
   | MvString String
-  | MvList [Mvanda]
+  | MvBlock [Mvanda]
   | MvNum Rational
 
 instance Show Mvanda where
-  show (MvAtom x)   = x
+  show (MvInstr x)  = show x
   show (MvString x) = show x
   show (MvNum  x)   = show x
-  show (MvList xs)  = "[" ++ s ++ "]"
+  show (MvBlock xs) = "[" ++ s ++ "]"
     where s = unwords $ show <$> xs
