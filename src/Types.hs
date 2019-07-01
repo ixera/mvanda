@@ -42,7 +42,7 @@ data MvInstr =
   | MStrIn
   | MNumOut
   | MCharOut
-  deriving (Show, Ord)
+  deriving Ord
   -- Ord is required for the Map in Arities.hs
 
 data Arity =
