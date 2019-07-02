@@ -30,7 +30,7 @@ mvValue =
   <|> mvList
 
 mvNum :: Parser Mvanda
-mvNum = (MvNum . read') <$> many1 digit
+mvNum = MvNum . read' <$> many1 digit
   where read' = toRational . (read :: String -> Integer)
 
 mvString :: Parser Mvanda
@@ -73,9 +73,7 @@ strEscape = do
       _   -> ch
 
 hex :: Int -> Parser Char
-hex n = do
-  x <- (fst . head . readHex) <$> count n hexDigit
-  return $ chr x
+hex n = chr . fst . head . readHex <$> count n hexDigit
 
 instr :: String -> Parser Mvanda
 instr s = case M.lookup s instructions of
